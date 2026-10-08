@@ -1481,5 +1481,155 @@
 
     initAuth();
   </script>
+  <!-- ===== BIG BILLION DAYS BANNER (paste just before </body>) ===== -->
+<style>
+  .bbdb-wrap{
+    position:relative; margin:0 auto 1.8rem; border-radius:22px; padding:2px; overflow:hidden;
+    background:linear-gradient(135deg,#FFE500,#2874F0,#FF007A,#FFE500);
+    background-size:300% 300%; animation:bbdbBorder 5s linear infinite;
+    box-shadow:0 18px 50px -12px rgba(40,116,240,.5), 0 0 40px rgba(255,229,0,.1);
+  }
+  @keyframes bbdbBorder{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+  .bbdb-inner{
+    position:relative; border-radius:20px; padding:1.3rem 1.5rem; overflow:hidden;
+    display:grid; grid-template-columns:1.25fr 1fr auto; gap:1.4rem; align-items:center;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(40,116,240,.45), transparent 55%),
+      radial-gradient(circle at 95% 100%, rgba(255,0,122,.28), transparent 55%),
+      #0A1022;
+  }
+  .bbdb-inner::after{
+    content:''; position:absolute; top:0; left:-60%; width:35%; height:100%; pointer-events:none;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,.07),transparent);
+    animation:bbdbSweep 5s ease-in-out infinite;
+  }
+  @keyframes bbdbSweep{0%{left:-60%}55%{left:130%}100%{left:130%}}
+
+  .bbdb-pill{
+    display:inline-flex; align-items:center; gap:7px; padding:5px 13px; border-radius:30px;
+    font-size:.68rem; font-weight:800; letter-spacing:1.3px; text-transform:uppercase;
+    background:rgba(16,185,129,.14); border:1px solid rgba(16,185,129,.5); color:#34D399; margin-bottom:.7rem;
+  }
+  .bbdb-dot{ width:8px; height:8px; border-radius:50%; background:currentColor; animation:bbdbPulse 1.3s ease-in-out infinite; }
+  @keyframes bbdbPulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 8px transparent}100%{box-shadow:0 0 0 0 transparent}}
+  .bbdb-brand{ font-size:.72rem; color:#94A3B8; font-weight:700; letter-spacing:3px; text-transform:uppercase; }
+  .bbdb-title{
+    font-size:clamp(1.55rem,3.2vw,2.15rem); line-height:1.05; font-weight:800; margin:.2rem 0 .45rem;
+    background:linear-gradient(135deg,#FFE500,#FFF 50%,#7DB5FF); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  .bbdb-desc{ font-size:.82rem; color:#CBD5E1; line-height:1.5; }
+  .bbdb-desc b{ color:#FFD700; }
+
+  .bbdb-dates{ display:flex; flex-direction:column; gap:10px; }
+  .bbdb-date{
+    display:flex; align-items:center; gap:11px; padding:10px 13px; border-radius:14px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+  }
+  .bbdb-date-ico{ font-size:1.25rem; }
+  .bbdb-date-label{ font-size:.62rem; color:#94A3B8; text-transform:uppercase; letter-spacing:1.2px; font-weight:700; }
+  .bbdb-date-val{ font-size:.92rem; font-weight:800; color:#fff; }
+  .bbdb-date-val small{ font-size:.7rem; font-weight:600; color:#94A3B8; }
+
+  .bbdb-right{ display:flex; flex-direction:column; gap:12px; min-width:230px; }
+  .bbdb-timer-label{ font-size:.62rem; color:#94A3B8; text-transform:uppercase; letter-spacing:1.4px; font-weight:700; text-align:center; }
+  .bbdb-timer{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .bbdb-box{ background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:8px 0 6px; text-align:center; }
+  .bbdb-num{ font-size:1.25rem; font-weight:800; color:#fff; font-variant-numeric:tabular-nums; line-height:1.1; }
+  .bbdb-unit{ font-size:.54rem; color:#94A3B8; text-transform:uppercase; letter-spacing:1px; margin-top:2px; font-weight:700; }
+  .bbdb-cta{
+    position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; gap:7px;
+    padding:12px 16px; border-radius:13px; text-decoration:none; font-size:.88rem; font-weight:800; color:#0A1022;
+    background:linear-gradient(135deg,#FFE500,#FFB800); box-shadow:0 8px 24px rgba(255,200,0,.38);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .bbdb-cta:hover{ transform:translateY(-2px) scale(1.02); box-shadow:0 12px 30px rgba(255,200,0,.55); }
+  .bbdb-cta::before{
+    content:''; position:absolute; top:0; left:-100%; width:55%; height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.65),transparent);
+    animation:bbdbShine 2.6s ease-in-out infinite;
+  }
+  @keyframes bbdbShine{0%{left:-100%}45%{left:130%}100%{left:130%}}
+
+  @media (max-width:900px){
+    .bbdb-inner{ grid-template-columns:1fr; gap:1rem; text-align:center; padding:1.2rem 1rem; }
+    .bbdb-dates{ flex-direction:row; }
+    .bbdb-date{ flex:1; justify-content:center; flex-direction:column; gap:3px; text-align:center; }
+    .bbdb-right{ min-width:0; }
+  }
+  @media (max-width:420px){
+    .bbdb-date-val{ font-size:.8rem; }
+    .bbdb-num{ font-size:1.1rem; }
+  }
+</style>
+
+<script>
+(function () {
+  // ===== SETTINGS (all times in IST) =====
+  var STORE_LINK  = "https://fktr.in/5OF16My";               // Your Flipkart link (same as your Flipkart card)
+  var SALE_START  = new Date("2026-10-08T00:00:00+05:30");   // Sale started (early access)
+  var PUBLIC_OPEN = new Date("2026-10-09T00:00:00+05:30");   // Open for everyone
+  var SALE_END    = new Date("2026-10-18T23:59:59+05:30");   // Update this when Flipkart confirms the end date
+
+  var hero = document.querySelector(".hero");
+  if (!hero) return;
+
+  var now = new Date();
+  if (now < SALE_START || now > SALE_END) return; // show only while the sale is running
+
+  function fmt(d){
+    return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
+  }
+  function pad(n){ return String(n).padStart(2, "0"); }
+
+  var wrap = document.createElement("div");
+  wrap.className = "bbdb-wrap";
+  wrap.innerHTML =
+    '<div class="bbdb-inner">' +
+      '<div>' +
+        '<div class="bbdb-pill"><span class="bbdb-dot"></span><span id="bbdbStatus">Live Now</span></div>' +
+        '<div class="bbdb-brand">Flipkart</div>' +
+        '<div class="bbdb-title">Big Billion Days 2026</div>' +
+        '<div class="bbdb-desc">The biggest festive sale is on! Shop on Flipkart through us and earn <b>Withdrawable Cashback Coins</b> on every order.</div>' +
+      '</div>' +
+      '<div class="bbdb-dates">' +
+        '<div class="bbdb-date"><div class="bbdb-date-ico">🚀</div><div>' +
+          '<div class="bbdb-date-label">Sale Started</div>' +
+          '<div class="bbdb-date-val">' + fmt(SALE_START) + '</div></div></div>' +
+        '<div class="bbdb-date"><div class="bbdb-date-ico">⏳</div><div>' +
+          '<div class="bbdb-date-label">Sale Ends</div>' +
+          '<div class="bbdb-date-val">' + fmt(SALE_END) + '</div></div></div>' +
+      '</div>' +
+      '<div class="bbdb-right">' +
+        '<div class="bbdb-timer-label">Sale ends in</div>' +
+        '<div class="bbdb-timer">' +
+          '<div class="bbdb-box"><div class="bbdb-num" id="bbdbD">00</div><div class="bbdb-unit">Days</div></div>' +
+          '<div class="bbdb-box"><div class="bbdb-num" id="bbdbH">00</div><div class="bbdb-unit">Hrs</div></div>' +
+          '<div class="bbdb-box"><div class="bbdb-num" id="bbdbM">00</div><div class="bbdb-unit">Min</div></div>' +
+          '<div class="bbdb-box"><div class="bbdb-num" id="bbdbS">00</div><div class="bbdb-unit">Sec</div></div>' +
+        '</div>' +
+        '<a class="bbdb-cta" href="' + STORE_LINK + '" target="_blank" rel="noopener">🛍️ Shop on Flipkart ➔</a>' +
+      '</div>' +
+    '</div>';
+
+  // Insert right above the "Shop & Get Withdrawable Cashback" hero (no existing code is modified)
+  hero.parentNode.insertBefore(wrap, hero);
+
+  var timer;
+  function tick(){
+    var n = new Date();
+    if (n > SALE_END){ clearInterval(timer); wrap.remove(); return; }
+    var status = document.getElementById("bbdbStatus");
+    status.textContent = (n < PUBLIC_OPEN) ? "Early Access Live Now" : "Live Now";
+    var s = Math.floor((SALE_END - n) / 1000);
+    document.getElementById("bbdbD").textContent = pad(Math.floor(s / 86400));
+    document.getElementById("bbdbH").textContent = pad(Math.floor((s % 86400) / 3600));
+    document.getElementById("bbdbM").textContent = pad(Math.floor((s % 3600) / 60));
+    document.getElementById("bbdbS").textContent = pad(s % 60);
+  }
+  tick();
+  timer = setInterval(tick, 1000);
+})();
+</script>
+<!-- ===== END BIG BILLION DAYS BANNER ===== -->
 </body>
 </html>
