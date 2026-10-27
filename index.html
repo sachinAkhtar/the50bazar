@@ -1482,5 +1482,143 @@
     initAuth();
   </script>
 </style>
+  <!-- ===== Premium Offer Banner Slider (NEW) | paste just before </body> ===== -->
+<script>
+(function () {
+  try {
+    if (typeof stores === 'undefined') return;
+    const hero = document.querySelector('main .hero');
+    if (!hero) return;
+
+    /* ---------- CSS (sab kuch .x50ob se scoped) ---------- */
+    const css = `
+    .x50ob{position:relative;overflow:hidden;border-radius:22px;margin-bottom:1.8rem;border:1px solid rgba(255,215,0,.28);box-shadow:0 14px 40px -16px rgba(0,0,0,.7)}
+    .x50ob-track{display:flex;transition:transform .8s cubic-bezier(.65,0,.25,1)}
+    .x50ob-slide{position:relative;min-width:100%;min-height:200px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:1.5rem 1.8rem 2rem;text-decoration:none;color:#fff;overflow:hidden;
+      background:radial-gradient(circle at 85% 20%,var(--oc) 0%,transparent 55%),linear-gradient(125deg,#0b1020 20%,#05070d 100%)}
+    .x50ob-slide::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.07) 50%,transparent 65%);transform:translateX(-120%);animation:x50obShine 5s ease-in-out infinite;pointer-events:none}
+    .x50ob-text{position:relative;z-index:2;flex:1.2;min-width:0;text-align:left}
+    .x50ob-brand{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px}
+    .x50ob-brand img{width:28px;height:28px;border-radius:50%;object-fit:contain;background:#fff;padding:2px}
+    .x50ob-tag{font-size:.66rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#FFD700;border:1px solid rgba(255,215,0,.45);padding:3px 10px;border-radius:20px;background:rgba(255,215,0,.08)}
+    .x50ob-title{font-size:clamp(1.25rem,3vw,2.2rem);font-weight:800;line-height:1.12;letter-spacing:-.5px;margin-bottom:6px}
+    .x50ob-title em{font-style:normal;background:linear-gradient(90deg,#FFE08A,#FFD700,#FFB800);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .x50ob-desc{font-size:clamp(.74rem,1.2vw,.92rem);color:rgba(255,255,255,.78);margin-bottom:14px;max-width:420px}
+    .x50ob-cta{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#FFE08A,#FFB800);color:#1a1200;font-weight:800;font-size:.8rem;padding:8px 18px;border-radius:30px;box-shadow:0 6px 18px -6px rgba(255,184,0,.7)}
+    .x50ob-vis{position:relative;z-index:1;flex:1;height:150px;min-width:130px}
+    .x50ob-item{position:absolute;width:var(--s);height:var(--s);left:var(--x);bottom:var(--y);transform:rotate(var(--r));animation:x50obFloat 4s ease-in-out infinite;animation-delay:var(--d);filter:drop-shadow(0 10px 18px rgba(0,0,0,.55))}
+    .x50ob-item svg{width:100%;height:100%;overflow:visible}
+    .x50ob-item svg *{fill:rgba(255,255,255,.12);stroke:#FFE08A;stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+    .x50ob-photo{position:absolute;right:0;top:50%;transform:translateY(-50%);height:170px;max-width:100%;object-fit:cover;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.6)}
+    .x50ob-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:5}
+    .x50ob-dot{width:7px;height:7px;border-radius:10px;background:rgba(255,255,255,.35);border:none;padding:0;cursor:pointer;transition:.35s}
+    .x50ob-dot.on{width:22px;background:#FFD700}
+    @keyframes x50obFloat{0%,100%{transform:translateY(0) rotate(var(--r))}50%{transform:translateY(-9px) rotate(var(--r))}}
+    @keyframes x50obShine{0%{transform:translateX(-120%)}45%,100%{transform:translateX(120%)}}
+    @media (max-width:560px){
+      .x50ob-slide{min-height:185px;padding:1.2rem 1rem 1.8rem}
+      .x50ob-vis{min-width:100px;height:120px;transform:scale(.8);transform-origin:right center}
+      .x50ob-desc{display:none}
+    }
+    @media (prefers-reduced-motion:reduce){.x50ob-item,.x50ob-slide::before{animation:none}}`;
+    const st = document.createElement('style');
+    st.textContent = css;
+    document.head.appendChild(st);
+
+    /* ---------- Kapde / fashion icons (line-art SVG) ---------- */
+    const ICON = {
+      tee:    '<path d="M30 15 10 28l10 17 10-5v48h40V40l10 5 10-17-20-13Q50 30 30 15Z"/>',
+      dress:  '<path d="M38 8h24l-4 28 22 56H20l22-56Z"/><path d="M38 8l-3 14M62 8l3 14"/>',
+      jacket: '<path d="M32 12 8 30l6 40 12-4 2 24h44l2-24 12 4 6-40-24-18Q50 26 32 12Z"/><path d="M50 26v68"/>',
+      sneaker:'<path d="M6 66V48q16-2 24-14l10 6q8 6 18 6 22 2 34 14v10Z"/><path d="M6 66h88M38 44l6 8M48 46l6 8"/>',
+      bag:    '<path d="M20 38h60l6 52H14Z"/><path d="M35 38V28q0-14 15-14t15 14v10"/>',
+      watch:  '<path d="M38 8h24l-2 22H40ZM38 92h24l-2-22H40Z"/><circle cx="50" cy="50" r="22"/><path d="M50 36v14l9 6"/>'
+    };
+    const svg = t => '<svg viewBox="0 0 100 100">' + ICON[t] + '</svg>';
+
+    /* ---------- Har store ka premium content (yahan edit kar sakte ho) ----------
+       img: apni real photo ka path likho (jaise "banner-myntra.jpg"), khali chhodo to kapde ke icons dikhenge */
+    const data = {
+      Flipkart: { tag:"Flipkart Exclusive", t1:"Everything You Love,", t2:"Rewarded.",        desc:"Premium picks across fashion & lifestyle, with cashback coins on every order.", items:['sneaker','watch','tee'],   img:"" },
+      Ajio:     { tag:"Ajio Luxe",          t1:"Curated Style,",       t2:"Elevated.",        desc:"Handpicked designer-inspired looks, with cashback coins on every order.",       items:['dress','bag','sneaker'],   img:"" },
+      Myntra:   { tag:"Myntra Couture",     t1:"Wear Your",            t2:"Confidence.",      desc:"Top fashion brands for the modern wardrobe, with cashback coins.",              items:['jacket','dress','bag'],    img:"" },
+      Meesho:   { tag:"Meesho Select",      t1:"Premium Finds,",       t2:"Smarter Prices.",  desc:"Trendy styles for everyone, with cashback coins on every order.",               items:['tee','dress','bag'],       img:"" },
+      Shopsy:   { tag:"Shopsy Signature",   t1:"Everyday Luxe,",       t2:"Rewarded.",        desc:"Daily essentials with a touch of style, plus cashback coins.",                  items:['tee','sneaker','watch'],   img:"" },
+      Amazon:   { tag:"Amazon Prime Picks", t1:"Discover More,",       t2:"Earn More.",       desc:"Millions of products, one rewarding experience with cashback coins.",           items:['bag','watch','jacket'],    img:"" }
+    };
+    const pos = [
+      { s:'92px', x:'4%',  y:'6%',  r:'-10deg', d:'0s'   },
+      { s:'78px', x:'38%', y:'30%', r:'8deg',   d:'.8s'  },
+      { s:'70px', x:'66%', y:'4%',  r:'-4deg',  d:'1.6s' }
+    ];
+
+    /* ---------- Banner build ---------- */
+    const slider = document.createElement('div');
+    slider.className = 'x50ob';
+    hero.parentNode.insertBefore(slider, hero);
+
+    const track = document.createElement('div');
+    track.className = 'x50ob-track';
+    const dotsWrap = document.createElement('div');
+    dotsWrap.className = 'x50ob-dots';
+
+    stores.forEach((s, i) => {
+      const o = data[s.name] || { tag:s.name, t1:"Premium Offers,", t2:"Rewarded.", desc:"Shop now & earn cashback coins.", items:['tee','bag','watch'], img:"" };
+      const a = document.createElement('a');
+      a.className = 'x50ob-slide';
+      a.href = s.url; a.target = '_blank'; a.rel = 'noopener';
+      a.style.setProperty('--oc', s.color);
+
+      const visual = o.img
+        ? `<img class="x50ob-photo" src="${o.img}" alt="${s.name}">`
+        : o.items.map((t, k) => {
+            const p = pos[k];
+            return `<div class="x50ob-item" style="--s:${p.s};--x:${p.x};--y:${p.y};--r:${p.r};--d:${p.d}">${svg(t)}</div>`;
+          }).join('');
+
+      a.innerHTML = `
+        <div class="x50ob-text">
+          <div class="x50ob-brand"><img src="${s.logo}" alt=""><span class="x50ob-tag">${o.tag}</span></div>
+          <div class="x50ob-title">${o.t1} <em>${o.t2}</em></div>
+          <div class="x50ob-desc">${o.desc}</div>
+          <span class="x50ob-cta">Shop Now ➔</span>
+        </div>
+        <div class="x50ob-vis">${visual}</div>`;
+      track.appendChild(a);
+
+      const d = document.createElement('button');
+      d.className = 'x50ob-dot' + (i === 0 ? ' on' : '');
+      d.setAttribute('aria-label', 'Slide ' + (i + 1));
+      d.onclick = () => { go(i); restart(); };
+      dotsWrap.appendChild(d);
+    });
+
+    slider.appendChild(track);
+    slider.appendChild(dotsWrap);
+
+    /* ---------- Slider logic ---------- */
+    let idx = 0, timer = null;
+    const total = stores.length;
+    function go(n) {
+      idx = (n + total) % total;
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      dotsWrap.querySelectorAll('.x50ob-dot').forEach((d, k) => d.classList.toggle('on', k === idx));
+    }
+    function start() { timer = setInterval(() => go(idx + 1), 4000); }
+    function restart() { clearInterval(timer); start(); }
+
+    slider.addEventListener('mouseenter', () => clearInterval(timer));
+    slider.addEventListener('mouseleave', restart);
+    let sx = 0;
+    slider.addEventListener('touchstart', e => { sx = e.touches[0].clientX; clearInterval(timer); }, { passive: true });
+    slider.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 40) go(dx < 0 ? idx + 1 : idx - 1);
+      restart();
+    });
+    start();
+  } catch (err) { console.warn('Offer banner skipped:', err); }
+})();
+</script>
 </body>
 </html>
